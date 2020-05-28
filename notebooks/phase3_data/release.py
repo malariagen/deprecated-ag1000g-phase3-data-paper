@@ -5,6 +5,8 @@ import dask.array as da
 import zarr
 import gcsfs
 
+__version__ = '0.1.0'
+
 # helper class to load phase 3 data
 # doesn't get involved with storing data
 # just exists to know where files are in relation to one another.
@@ -12,6 +14,12 @@ class release_data:
     
     release_dir = None
     gcs = None
+    _all_samplesets = ["AG1000G-AO", "AG1000G-BF-A", "AG1000G-BF-B", "AG1000G-BF-C", "AG1000G-CD",
+                       "AG1000G-CF", "AG1000G-CI", "AG1000G-CM-A", "AG1000G-CM-B", "AG1000G-CM-C",
+                       "AG1000G-FR", "AG1000G-GA-A", "AG1000G-GH", "AG1000G-GM-A", "AG1000G-GM-B",
+                       "AG1000G-GM-C", "AG1000G-GN-A", "AG1000G-GN-B", "AG1000G-GQ", "AG1000G-GW",
+                       "AG1000G-KE", "AG1000G-ML-A", "AG1000G-ML-B", "AG1000G-MW", "AG1000G-MZ",
+                       "AG1000G-TZ", "AG1000G-UG", "AG1000G-X"]
     
     def __init__(self, release_path=Path("vo_agam_release/v3"), gcs_filesystem=gcsfs.GCSFileSystem()):
         # input checking
@@ -26,7 +34,15 @@ class release_data:
         
         self.release_dir = release_path
         self.gcs = gcs_filesystem
-        
+     
+    @property
+    def all_samplesets(self):
+        return self._all_samplesets
+    
+    @property
+    def all_wild_samplesets(self):
+        return [x for x in self._all_samplesets if x != "AG1000G-X"]
+
     def load_mask(self, seq_id, mask_id, filters_model="dt_20200416"):
     
         mask_path = self.release_dir / "site_filters" / filters_model / mask_id
