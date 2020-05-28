@@ -96,6 +96,7 @@ class release_data:
             metadata_path = self.release_dir / "metadata" / "general" / sampleset / "samples.meta.csv"
             with self.gcs.open(metadata_path) as gcs_fh:
                 df = pd.read_csv(gcs_fh, index_col=0)
+                df["sampleset"] = sampleset
 
             if include_aim_species_calls:
                 species_path_aim = self.release_dir / "metadata" / species_analysis / sampleset / "samples.species_aim.csv"
